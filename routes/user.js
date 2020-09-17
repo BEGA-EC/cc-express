@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
         });
       };
       
-      smtpTransport = nodemailer.createTransport(smtpTransport({
+      let smtpTransportVar = nodemailer.createTransport(smtpTransport({
         host: process.env.EMAIL_HOST,
         secure: process.env.EMAIL_SECURE,
         port: process.env.EMAIL_PORT,
@@ -83,7 +83,10 @@ router.post('/', async (req, res) => {
           pass: process.env.EMAIL_PASS
         },
         tls: {
-          rejectUnauthorized: false
+          authMethod:'NTLM',
+            secure:false,
+            tls: {rejectUnauthorized: false},
+            debug:true
         }
       }));
       
@@ -99,7 +102,7 @@ router.post('/', async (req, res) => {
                   subject : 'Confirmar Correo Electrónico',
                   html : htmlToSend
                };
-              smtpTransport.sendMail(mailOptions, (error, response)=> {
+              smtpTransportVar.sendMail(mailOptions, (error, response)=> {
                   if (error) {
                       console.log(error);
                       callback(error);
