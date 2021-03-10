@@ -54,7 +54,8 @@ const adminSchema = new Schema({
                     'Trajes hombre',
                     'Trajes mujer',
                     'Varios'
-                ]},
+                ]
+            },
         }
     ],
     originOfProducts: {
@@ -62,20 +63,6 @@ const adminSchema = new Schema({
         trim: true,
         required: true
     },
-    numberLocals: {
-        type: Number,
-        required: true,
-        max: 3
-    },
-    locals: [
-        {
-            localNumber: String,
-            predioNumber: String,
-            sector: String,
-            floor: String,
-            hallNumber: String
-        }
-    ],
     qualifiedCraftman: {
         type: Boolean,
         required: true
@@ -464,6 +451,6 @@ const userSchema = new Schema({
     }
 })
 
-const User = model('user', userSchema)
+const UserModel = model('user', userSchema)
 
-module.exports = User
+module.exports = UserModel

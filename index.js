@@ -36,6 +36,10 @@ app.use('/user', user)
 app.use('/auth', auth)
 // app.use('/news', news)
 
+// app.use((error, req, res, next) => {
+//     return res.status(500).json({ error: error.toString() });
+// });
+
 mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true})
     .then(() => {console.log(`DB: `.red + `Run on http://${process.env.DB_HOST}:${process.env.DB_PORT}`.yellow) 
         app.listen(port, () => {

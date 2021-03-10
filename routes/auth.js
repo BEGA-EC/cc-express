@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+const User = require('../models/user.model')
 router.post('/', async (req, res) => {
     let user = await User.findOne({email: req.body.email})
     if (!user) return res.status(400).send({success: false, data: "La combinación de usuario y contraseña no es válida."});
