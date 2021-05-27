@@ -62,7 +62,8 @@ router.post('/', async(req, res) => {
 
     if (user) return res.status(400).send({
         success: false,
-        data: "El email ya se encuentra en uso"
+        data: "El email ya se encuentra en uso",
+        status: 400
     })
 
     const salt = await bcrypt.genSalt(10)
@@ -88,31 +89,27 @@ router.post('/', async(req, res) => {
     };
 
     let smtpTransportVar = nodemailer.createTransport(smtpTransport({
-        host: process.env.SMTP_HOST,
+        host: 'smtp.gmail.com',
         secure: true,
-        port: process.env.SMTP_PORT,
+        port: 465,
         auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
+            user: 'ccmna.ec@gmail.com',
+            pass: 'JBkaWf8G'
         },
         tls: {
-            authMethod: 'NTLM',
-            secure: true,
-            tls: {
-                rejectUnauthorized: false
-            },
-            debug: true
+            rejectUnauthorized: false
         }
     }));
 
     readHTMLFile(__dirname + '/template.html', function (err, html) {
+        console.log(__dirname + '/template.html');
         const template = handlebars.compile(html);
         const replacements = {
             code: randomCode
         };
         const htmlToSend = template(replacements);
         const mailOptions = {
-            from: 'no-reply@ccmna.com.ec',
+            from: 'ccmna.ec@gmail.com',
             to: req.body.email,
             subject: 'Confirmar Correo Electrónico',
             html: htmlToSend
@@ -121,6 +118,7 @@ router.post('/', async(req, res) => {
             if (error) {
                 console.log(error);
             }
+            console.log(response);
         });
     });
 
@@ -128,7 +126,8 @@ router.post('/', async(req, res) => {
     res.status(201).send({
         success: true,
         data: "Usuario creado sastifactoriamente",
-        email: result.email
+        email: result.email,
+        status: 201
     })
 })
 
@@ -164,7 +163,7 @@ router.post('/avatar/:id', (req, res) => {
     const upload = multer({
         storage: multerS3({
             s3: s3,
-            bucket: 'role-zone',
+            bucket: 'cc-express',
             acl: 'public-read',
             contentType: multerS3.AUTO_CONTENT_TYPE,
             key: function (request, file, cb) {
@@ -364,7 +363,7 @@ router.post('/check', async (req, res) => {
                 });
             } else if (predioNumbers > 0) {
                 return res.status(400).send({
-                    error: `Los siguientes números de predio ya existen: ${predioNumbersNumbers.join(', ')}`
+                    error: `Los siguientes números de predio ya existen: ${predioNumbers.join(', ')}`
                 });
             } else {
                 return res.status(200).send({
