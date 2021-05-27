@@ -163,7 +163,7 @@ router.post('/avatar/:id', (req, res) => {
     const upload = multer({
         storage: multerS3({
             s3: s3,
-            bucket: 'cc-express',
+            bucket: 'ccmna',
             acl: 'public-read',
             contentType: multerS3.AUTO_CONTENT_TYPE,
             key: function (request, file, cb) {
